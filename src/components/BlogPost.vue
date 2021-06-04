@@ -1,5 +1,5 @@
 <template>
-  <div class="blog-wrapper no-user">
+  <div class="blog-wrapper" :class="{'no-user' :!user}">
     <div class="blog-content">
       <div>
         <h2 v-if="post.welcomeScreen">{{ post.title }}</h2>
@@ -7,23 +7,25 @@
         <p v-if="post.welcomeScreen">{{ post.blogPost }}</p>
         <p class="content-preview" v-else>{{ post.blogHTML }}</p>
         <router-link class="link link-light" v-if="post.welcomeScreen" to="#"
-          >Login/Register<Arrow class="arrow arrow-light" />
+        >Login/Register
+          <Arrow class="arrow arrow-light"/>
         </router-link>
         <router-link class="link" v-else to="#"
-          >View The Post<Arrow class="arrow" />
+        >View The Post
+          <Arrow class="arrow"/>
         </router-link>
       </div>
     </div>
     <div class="blog-photo">
       <img
-        v-if="post.welcomeScreen"
-        :src="require(`../assets/blogPhotos/${post.photo}.jpg`)"
-        alt=""
+          v-if="post.welcomeScreen"
+          :src="require(`../assets/blogPhotos/${post.photo}.jpg`)"
+          alt=""
       />
       <img
-        v-else
-        :src="require(`../assets/blogPhotos/${post.blogCoverPhoto}.jpg`)"
-        alt=""
+          v-else
+          :src="require(`../assets/blogPhotos/${post.blogCoverPhoto}.jpg`)"
+          alt=""
       />
     </div>
   </div>
@@ -31,10 +33,17 @@
 
 <script>
 import Arrow from "../assets/Icons/arrow-right-light.svg";
+
 export default {
   name: "blogPost",
   props: ["post"],
-  components: { Arrow },
+  components: {Arrow},
+  computed: {
+    // this bit of code will return a value of true or false
+    user() {
+      return this.$store.state.user
+    }
+  },
 };
 </script>
 
@@ -43,7 +52,7 @@ export default {
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  0 2px 4px -1px rgba(0, 0, 0, 0.06);
   @media (min-width: 700px) {
     min-height: 650px;
     max-height: 650px;
@@ -109,6 +118,7 @@ export default {
         border-bottom-color: #303030;
       }
     }
+
     .link-light {
       &:hover {
         border-bottom-color: #ffff;
@@ -120,7 +130,7 @@ export default {
     order: 1;
     flex: 3;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
     @media (min-width: 700px) {
       order: 2;
@@ -141,11 +151,13 @@ export default {
     .blog-content {
       order: 2;
     }
+
     .blog-photo {
       order: 1;
     }
   }
 }
+
 .no-user:first-child {
   .blog-content {
     background-color: #303030;

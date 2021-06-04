@@ -3,36 +3,36 @@
     <div class="container">
       <div class="left">
         <div class="col-1">
-          <router-link class="header" :to="{ name: 'home' }"
-            >FireBlogs</router-link
-          >
+          <router-link class="header" :to="{ name: 'Home' }">FireBlogs</router-link>
           <ul>
             <li>
-              <a href="#"><youtube class="svg-icon" /></a>
+              <a href="#">
+                <youtube class="svg-icon"/>
+              </a>
             </li>
             <li>
-              <a href="#"><twitter class="svg-icon" /></a>
+              <a href="#">
+                <twitter class="svg-icon"/>
+              </a>
             </li>
             <li>
-              <a href="#"><instagram class="svg-icon" /></a>
+              <a href="#">
+                <instagram class="svg-icon"/>
+              </a>
             </li>
             <li>
-              <a href="#"><linkedin class="svg-icon" /></a>
+              <a href="#">
+                <linkedin class="svg-icon"/>
+              </a>
             </li>
           </ul>
         </div>
         <div class="col-2">
           <ul>
-            <router-link class="link" :to="{ name: 'home' }">Home</router-link>
-            <router-link class="link" :to="{ name: 'blogs' }"
-              >Blogs</router-link
-            >
-            <router-link v-if="user" class="link" :to="{ name: 'newpost' }"
-              >Create Post</router-link
-            >
-            <router-link v-if="!user" class="link" :to="{ name: 'login' }"
-              >Login In / Register</router-link
-            >
+            <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
+            <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
+            <router-link class="link" to="#">Create Post</router-link>
+            <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login In / Register</router-link>
           </ul>
         </div>
       </div>
@@ -48,6 +48,7 @@ import youtube from "../assets/Icons/youtube-brands.svg";
 import twitter from "../assets/Icons/twitter-brands.svg";
 import instagram from "../assets/Icons/instagram-brands.svg";
 import linkedin from "../assets/Icons/linkedin-brands.svg";
+
 export default {
   name: "footer-vue",
   components: {
@@ -55,6 +56,12 @@ export default {
     twitter,
     instagram,
     linkedin,
+  },
+  computed: {
+    // this bit of code will return a value of true or false
+    user() {
+      return this.$store.state.user
+    }
   },
 };
 </script>
@@ -64,6 +71,7 @@ footer {
   margin-top: auto;
   padding: 100px 25px;
   background-color: #303030;
+
   .container {
     display: flex;
     flex-direction: column;
@@ -119,6 +127,7 @@ footer {
 
       .col-1 {
         flex-direction: column;
+
         h2 {
           text-align: center;
           @media (min-width: 800px) {
@@ -132,6 +141,7 @@ footer {
           li {
             display: flex;
             align-items: center;
+
             .svg-icon {
               width: 24px;
               height: auto;
@@ -150,6 +160,7 @@ footer {
           @media (min-width: 800px) {
             flex-direction: column;
           }
+
           .link {
             font-size: 16px;
             font-weight: 500;
