@@ -31,7 +31,7 @@
           <ul>
             <router-link class="link" :to="{ name: 'Home' }">Home</router-link>
             <router-link class="link" :to="{ name: 'Blogs' }">Blogs</router-link>
-            <router-link class="link" to="#">Create Post</router-link>
+            <router-link v-if="admin" class="link" to="#">Create Post</router-link>
             <router-link v-if="!user" class="link" :to="{ name: 'Login' }">Login In / Register</router-link>
           </ul>
         </div>
@@ -61,6 +61,9 @@ export default {
     // this bit of code will return a value of true or false
     user() {
       return this.$store.state.user
+    },
+    admin() {
+      return this.$store.state.profileAdmin
     }
   },
 };
