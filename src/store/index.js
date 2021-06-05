@@ -30,6 +30,11 @@ export default new Vuex.Store({
                 blogDate: "May 1, 2021",
             },
         ],
+        blogHTML: "Write your blog title here...",
+        blogTitle: "",
+        blogPhotoName: "",
+        blogPhotoFileURL: null,
+        blogPhotoPreview: null,
         editPost: null,
         user: null,
         profileAdmin: null,
@@ -43,14 +48,12 @@ export default new Vuex.Store({
     mutations: {
         toggleEditPost(state, payload) {
             state.editPost = payload
-            console.log(state.editPost)
         },
         updateUser(state, payload) {
             state.user = payload
         },
         setProfileAdmin(state, payload) {
             state.profileAdmin = payload;
-            console.log(state.profileAdmin)
         },
         setProfileInfo(state, doc) {
             // the values doc.id & doc.data().email ...etc comes from our collection on firebase
@@ -85,8 +88,6 @@ export default new Vuex.Store({
             commit("setProfileInitials");
             const token = await user.getIdTokenResult();
             const admin = await token.claims.admin; // will return true if the user is admin
-            console.log(token)
-            console.log(admin)
             commit('setProfileAdmin', admin)
         },
 
