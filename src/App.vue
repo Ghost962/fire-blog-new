@@ -1,6 +1,6 @@
 <template>
   <div class="app-wrapper">
-    <div class="app">
+    <div class="app" v-if="this.$store.state.postLoaded">
       <Navigation v-show="!navigation"/>
       <router-view/>
       <Footer v-show="!navigation"/>
@@ -25,13 +25,14 @@ export default {
   created() {
     // this bit of code is gonna to say whenever there is an auth state change
     // we want to run that mutation to update the user whether they logged in or they signed out
-    firebase.auth().onAuthStateChanged( (user) => {
+    firebase.auth().onAuthStateChanged((user) => {
       this.$store.commit("updateUser", user); // here user is gonna be either true or false if he signed in or not
       if (user) {
-         this.$store.dispatch("getCurrentUser", user);
+        this.$store.dispatch("getCurrentUser", user);
       }
     })
-    this.checkRoute()
+    this.checkRoute();
+    this.$store.dispatch("getPost");
   },
   mounted() {
   },

@@ -30,6 +30,8 @@ export default new Vuex.Store({
                 blogDate: "May 1, 2021",
             },
         ],
+        blogPosts: [],
+        postLoaded: null,
         blogHTML: "Write your blog title here...",
         blogTitle: "",
         blogPhotoName: "",
@@ -44,6 +46,14 @@ export default new Vuex.Store({
         profileUsername: null,
         profileId: null,
         profileInitials: null
+    },
+    getters: {
+        blogPostsFeed(state) {
+            return state.blogPosts.slice(0, 2);
+        },
+        blogPostsCards(state) {
+            return state.blogPosts.slice(2, 6);
+        },
     },
     mutations: {
         newBlogPost(state, payload) {
@@ -63,6 +73,15 @@ export default new Vuex.Store({
         },
         toggleEditPost(state, payload) {
             state.editPost = payload
+        },
+        setBlogState(state, payload) {
+            state.blogTitle = payload.blogTitle;
+            state.blogHTML = payload.blogHTML;
+            state.blogPhotoFileURL = payload.blogPhotoFileURL;
+            state.blogPhotoName = payload.blogCoverPhotoName;
+        },
+        filterBlogPost(state, payload) {
+            state.blogPosts = state.blogPosts.filter((post) => post.blogID !== payload)
         },
         updateUser(state, payload) {
             state.user = payload
@@ -105,7 +124,37 @@ export default new Vuex.Store({
             const admin = await token.claims.admin; // will return true if the user is admin
             commit('setProfileAdmin', admin)
         },
-
+        async getPost({state}) {
+            const dataBase = await db.collection('blogPosts').orderBy('date', 'desc');
+            const dbResults = await dataBase.get(); // returns an array of items
+            // so to iterate through these we need foreach
+            dbResults.forEach((doc) => {
+                // make sure if we call this function we dont add the same blog post twice so we add a filter
+                if (!state.blogPosts.some((post) => post.blogID === doc.id)) {
+                    // post not exist so we will add this post to the blog
+                    const data = {
+                        blogID: doc.data().blogID,
+                        blogHTML: doc.data().blogHTML,
+                        blogCoverPhoto: doc.data().blogCoverPhoto,
+                        blogTitle: doc.data().blogTitle,
+                        blogDate: doc.data().date,
+                        blogCoverPhotoName: doc.data().blogCoverPhotoName,
+                    };
+                    // push this post to the array
+                    state.blogPosts.push(data);
+                }
+            });
+            state.postLoaded = true;
+        },
+        async updatePost({commit, dispatch}, payload) {
+            commit("filterBlogPost", payload);
+            await dispatch("getPost");
+        },
+        async deletePost({commit}, payload) {
+            const getPost = await db.collection("blogPosts").doc(payload);
+            await getPost.delete();
+            commit("filterBlogPost", payload)
+        },
         async updateUserSettings({commit, state}) {
             const dataBase = await db.collection("users").doc(state.profileId);
             await dataBase.update({
